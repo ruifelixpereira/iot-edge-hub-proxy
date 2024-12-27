@@ -81,21 +81,13 @@ check_arch
 ###############################################################################
 echo ${PROJECT_ROOT}
 if [ $ARCH == "amd64" ]; then
-	docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src ekidd/rust-musl-builder cargo build --release --manifest-path /home/rust/src/edge-modules/edgehub-proxy/Cargo.toml
+	#docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src ekidd/rust-musl-builder cargo build --release --manifest-path /home/rust/src/edge-modules/edgehub-proxy/Cargo.toml
+    docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src clux/muslrust:stable cargo build --release --manifest-path /home/rust/src/edge-modules/edgehub-proxy/Cargo.toml
+    sudo chown -R $(whoami):$(whoami) ${PROJECT_ROOT}/edge-modules/edgehub-proxy/target
 	strip ${PROJECT_ROOT}/edge-modules/edgehub-proxy/target/x86_64-unknown-linux-musl/release/edgehub-proxy
-
-cd ${PROJECT_ROOT}
-docker build -t edge-hub-builder .
-docker create --name dummy_edge-hub-builder edge-hub-builder
-docker cp dummy_edge-hub-builder:/usr/src/edge-modules/edgehub-proxy/target/release/edgehub-proxy .
-docker rm -f dummy_edge-hub-builder
-
-docker run --rm -it edge-hub-builder bash
-
-
 elif [ $ARCH == "arm32v7" ]; then
 	docker build -t edgehub-proxy-builder ${PROJECT_ROOT}/edge-modules/edgehub-proxy/docker/linux/builder
-  docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src edgehub-proxy-builder cargo build --release --target=armv7-unknown-linux-gnueabihf --manifest-path /home/rust/src/edge-modules/edgehub-proxy/Cargo.toml
+    docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src edgehub-proxy-builder cargo build --release --target=armv7-unknown-linux-gnueabihf --manifest-path /home/rust/src/edge-modules/edgehub-proxy/Cargo.toml
 	docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src edgehub-proxy-builder arm-linux-gnueabihf-strip /home/rust/src/edge-modules/edgehub-proxy/target/armv7-unknown-linux-gnueabihf/release/edgehub-proxy
 fi
 
