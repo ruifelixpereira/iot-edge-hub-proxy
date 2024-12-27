@@ -26,11 +26,12 @@ git clone https://github.com/Azure/iotedge.git
 
 ### Change settings for TLS and Ciphers
 
-Modify `iotedge/edge-modules/edgehub-proxy/haproxy.cfg` the with desired configuration entries and save the file:
-- Modify the ssl-default-bind-options entry.
-- Modify the ssl-default-bind-ciphers entry.
+Modify `iotedge/edge-modules/edgehub-proxy/haproxy.cfg` with the desired configuration entries and save the file:
+- Modify the `ssl-default-bind-options` entry.
+- Modify the `ssl-default-bind-ciphers` entry.
 
 You can use this [configurator](https://ssl-config.mozilla.org/#server=haproxy&version=1.8&config=intermediate&openssl=3.4.0&guideline=5.7) to help you with the configuration.
+
 
 ### Build image
 
